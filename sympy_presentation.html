@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="vi"><head><meta charset="utf-8">
+<title>SymPy – Hệ bất phương trình bậc nhất hai ẩn</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/reveal.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/theme/white.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+<style>
+:root{--p:#0284c7;--card:#f0f9ff;--tx:#0c4a6e;--ln:#7dd3fc}
+body{background:#e0f2fe}
+.reveal-viewport{background:transparent!important}
+.bg{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;background:linear-gradient(120deg,#fff,#e0f2fe,#bae6fd 55%,#f0f9ff);background-size:300% 300%;animation:g 16s ease infinite}
+.bg::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(2,132,199,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(2,132,199,.08) 1px,transparent 1px);background-size:56px 56px}
+.bg u{position:absolute;top:0;left:0;right:0;height:10px;background:linear-gradient(90deg,#0284c7,#38bdf8,#7dd3fc)}
+.bg b{position:absolute;border-radius:50%;filter:blur(50px);opacity:.45;animation:f 12s ease-in-out infinite alternate}
+.bg i{position:absolute;bottom:-100px;left:var(--x);font:700 var(--s) Georgia,serif;font-style:normal;color:rgba(2,132,199,.16);animation:up var(--d) linear infinite;animation-delay:var(--l)}
+@keyframes g{50%{background-position:100% 50%}}
+@keyframes up{to{transform:translateY(-125vh) rotate(30deg)}}
+@keyframes f{to{transform:translate(70px,-50px) scale(1.25)}}
+@keyframes in{from{opacity:0;transform:translateY(16px)}}
+@media(prefers-reduced-motion:reduce){.bg,.bg *{animation:none!important}}
+.reveal{z-index:1;font-family:Inter,"Open Sans",sans-serif;font-size:36px;color:var(--tx)}
+.reveal .slides section.present>*{animation:in .5s ease both}
+.reveal .slides section.present>*:nth-child(n+2){animation-delay:.12s}
+.reveal .slides section.present>*:nth-child(n+3){animation-delay:.24s}
+.reveal h1,.reveal h2,.reveal h3{font-family:Inter,sans-serif;color:var(--p);font-weight:800;text-transform:none;letter-spacing:0}
+.reveal h1{font-size:1.6em;line-height:1.2;margin:.2em 0}
+.reveal h2{font-size:1.3em;margin:0 0 .5em;padding-bottom:.2em;border-bottom:4px solid var(--ln)}
+.reveal h3{font-size:1em;margin:.2em 0}
+.reveal section{text-align:left}
+.reveal ul{margin:0 0 0 1em;display:block}
+.reveal li{margin:.3em 0;line-height:1.3}
+.reveal b{color:var(--p)}
+.tag{display:inline-block;background:var(--p);color:#fff;border-radius:30px;padding:.1em .9em;font-size:.6em;font-weight:600;margin-bottom:.5em}
+.card{background:rgba(240,249,255,.88);border:2px solid var(--ln);border-radius:16px;padding:.5em .9em;margin:.3em 0;box-shadow:0 6px 18px rgba(2,132,199,.12)}
+.row{display:flex;gap:.8em;align-items:flex-start}.row>*{flex:1;min-width:0}
+.sys{border-left:5px solid var(--p);font-family:"Cambria Math",Georgia,serif;line-height:1.45}
+.sm{font-size:.8em}.xs{font-size:.66em}.c{text-align:center}
+.reveal pre{width:100%;margin:.3em 0;box-shadow:0 6px 18px rgba(2,132,199,.12);font-size:.62em;border:2px solid var(--ln);border-radius:14px;background:rgba(240,249,255,.92)}
+.reveal pre code{max-height:none;padding:.6em .9em;background:transparent;line-height:1.4}
+.reveal img.ph{border:3px solid var(--ln);border-radius:12px;max-width:100%;background:var(--card)}
+.res{background:linear-gradient(135deg,#0284c7,#38bdf8);color:#fff;border-radius:14px;padding:.5em .9em;margin-top:.4em;box-shadow:0 6px 18px rgba(2,132,199,.25)}.res b{color:#fff}
+.reveal .slide-number{color:var(--p);background:transparent;font-size:18px}
+</style></head><body>
+<div class="bg"><u></u>
+<b style="left:-5%;top:8%;width:420px;height:420px;background:#7dd3fc"></b>
+<b style="right:-6%;top:45%;width:480px;height:480px;background:#38bdf8;animation-delay:-5s"></b>
+<b style="left:35%;bottom:-18%;width:400px;height:400px;background:#bae6fd;animation-delay:-9s"></b>
+<i style="--x:4%;--s:80px;--d:24s;--l:-3s">≤</i><i style="--x:14%;--s:60px;--d:30s;--l:-18s">∑</i><i style="--x:26%;--s:90px;--d:26s;--l:-9s">x²</i>
+<i style="--x:40%;--s:70px;--d:32s;--l:-22s">≥</i><i style="--x:52%;--s:100px;--d:28s;--l:-5s">π</i><i style="--x:63%;--s:66px;--d:25s;--l:-15s">y</i>
+<i style="--x:74%;--s:84px;--d:34s;--l:-27s">∫</i><i style="--x:84%;--s:76px;--d:27s;--l:-11s">√</i><i style="--x:93%;--s:90px;--d:31s;--l:-20s">{</i>
+<svg viewBox="0 0 1440 120" preserveAspectRatio="none" style="position:absolute;bottom:0;left:0;width:100%;height:90px"><path d="M0,60 C240,110 480,10 720,50 C960,90 1200,20 1440,60 L1440,120 L0,120Z" fill="rgba(2,132,199,.13)"/></svg></div>
+<div class="reveal"><div class="slides">
+
+<!-- 1 -->
+<section>
+<div class="row" style="align-items:center"><div style="flex:0 0 150px"><img class="ph" data-t="Logo" data-w="150" data-h="150"></div>
+<div class="sm"><b>TRƯỜNG ĐẠI HỌC SƯ PHẠM – ĐẠI HỌC HUẾ</b><br>KHOA TOÁN HỌC</div></div>
+<div class="tag" style="margin-top:.8em">DỰ ÁN</div>
+<h1>SỬ DỤNG SYMPY ĐỂ GIẢI HỆ BẤT PHƯƠNG TRÌNH BẬC NHẤT HAI ẨN</h1>
+<div class="card sm"><b>NHÓM 9</b> · Lê Thị Linh Châu · Nguyễn Thị Xuân Thi · Trần Nguyễn Uyên Thi · Trượng Ngụy Minh Triết</div>
+<p class="sm">Huế, tháng 10 năm 2026</p>
+</section>
+
+<!-- 2 -->
+<section><h2>Lời mở đầu</h2>
+<ul><li>Lập trình không chỉ để tính toán, mà còn để <b>mô hình hóa, trực quan hóa, kiểm chứng</b> Toán học</li>
+<li><b>SymPy</b> (Python): xử lý đại số chính xác + vẽ đồ thị mạnh mẽ</li>
+<li>Mục đích dự án: viết mã Python để
+<ul class="sm"><li>xác định miền nghiệm</li><li>tìm điểm tối ưu</li><li>trực quan hóa kết quả bài toán hệ bất phương trình bậc nhất hai ẩn</li></ul></li></ul>
+</section>
+
+<!-- 3 -->
+<section><div class="tag">Chương I · Cơ sở lý thuyết</div><h2>Ngôn ngữ lập trình Python</h2>
+<div class="row"><div class="card"><h3>Phổ biến</h3>Top đầu về khoa học máy tính, tính toán khoa học, phân tích dữ liệu</div>
+<div class="card"><h3>Dễ tiếp cận</h3>Cú pháp đơn giản, rõ ràng, trực quan</div>
+<div class="card"><h3>Ứng dụng rộng</h3>Hệ sinh thái thư viện phong phú: AI, thiết kế hệ thống, toán chuyên sâu</div></div>
+</section>
+
+<!-- 4 -->
+<section><h2>Thư viện SymPy</h2>
+<ul><li>Thư viện <b>mã nguồn mở</b> cho toán học <b>ký hiệu</b> (symbolic)</li>
+<li>Là hệ đại số máy tính <b>CAS</b>, tương tự Mathematica, Maple, Wolfram Alpha</li>
+<li>Chỉ cần biết Python, không phải học ngôn ngữ riêng</li>
+<li>Xử lý biểu thức nguyên bản: rút gọn, giải phương trình, đạo hàm, tích phân</li>
+<li>Kiểm chứng kết quả &amp; khuyến khích tư duy khám phá</li></ul>
+</section>
+
+<!-- 5 -->
+<section><h2>Bất phương trình bậc nhất hai ẩn</h2>
+<div class="card c"><b>ax + by ≤ c</b> &nbsp;(hoặc ≥, &lt;, &gt;)<br><span class="sm">a, b, c ∈ ℝ; a, b không đồng thời bằng 0</span></div>
+<ul><li>Nghiệm: cặp (x₀; y₀) làm bất đẳng thức đúng → luôn có <b>vô số nghiệm</b></li>
+<li>Miền nghiệm: tập các điểm có tọa độ là nghiệm</li>
+<li>Ví dụ: <b>2x + 3y &lt; 1</b> ✔ &nbsp;|&nbsp; 2x² + 3y &lt; 1 ✘ (x bậc hai)</li></ul>
+</section>
+
+<!-- 6 -->
+<section><h2>Cách xác định miền nghiệm</h2>
+<p class="sm">Đường thẳng d: ax + by = c chia mặt phẳng thành hai nửa mặt phẳng bờ d.</p>
+<div class="row"><div class="card"><b>Bước 1</b><br>Vẽ đường thẳng d</div><div class="card"><b>Bước 2</b><br>Lấy điểm M₀ ∉ d (thường là O(0;0))</div></div>
+<div class="row"><div class="card"><b>Bước 3</b><br>Tính ax₀ + by₀, so sánh với c</div><div class="card"><b>Bước 4</b><br>Kết luận nửa mặt phẳng là miền nghiệm; gạch phần còn lại</div></div>
+</section>
+
+<!-- 7 -->
+<section><h2>Hệ bất phương trình bậc nhất hai ẩn</h2>
+<ul><li>Gồm <b>từ hai</b> bất phương trình bậc nhất hai ẩn trở lên</li>
+<li>Nghiệm: cặp (x₀; y₀) thỏa <b>đồng thời</b> mọi bất phương trình</li>
+<li>Nguyên tắc: miền nghiệm của hệ = <b>giao</b> các miền nghiệm thành phần</li></ul>
+<div class="card sm"><b>Cách làm:</b> biểu diễn từng bất phương trình → gạch phần không thuộc miền nghiệm → phần còn lại (thường là đa giác) là miền nghiệm của hệ</div>
+</section>
+
+<!-- 8 -->
+<section><h2>Ứng dụng thực tiễn &amp; Định lý đa giác lồi</h2>
+<ul class="sm"><li>Mô hình hóa ràng buộc về vốn, sức chứa, số lượng, nhu cầu thị trường</li></ul>
+<div class="card"><b>Định lý:</b> F(x;y) = ax + by trên miền nghiệm là đa giác lồi thì GTLN/GTNN đạt tại <b>một đỉnh</b> của đa giác.</div>
+<div class="row sm"><div class="card">① Lập hệ &amp; hàm mục tiêu</div><div class="card">② Vẽ miền nghiệm, tìm các đỉnh</div><div class="card">③ Thay từng đỉnh vào F</div><div class="card">④ So sánh → chọn max/min</div></div>
+</section>
+
+<!-- 9 -->
+<section><h2>Ưu điểm khi dùng SymPy</h2>
+<div class="row"><div class="card"><h3>🎯 Chính xác tuyệt đối</h3><span class="sm">Kết quả dạng phân số, căn thức; không sai số làm tròn</span></div>
+<div class="card"><h3>✍️ Cú pháp tự nhiên</h3><span class="sm">Khai báo symbols, Eq gần với tư duy toán học</span></div>
+<div class="card"><h3>📊 Trực quan hóa</h3><span class="sm">Tự động vẽ và tô màu miền nghiệm</span></div></div>
+</section>
+
+<!-- 10 -->
+<section><h2>Nhược điểm của SymPy</h2>
+<ul><li><b>Tốc độ xử lý chậm</b>: phải duy trì cấu trúc đại số → tốn tài nguyên</li>
+<li>Kém hiệu quả với bài toán quy mô lớn so với <b>NumPy, SciPy</b></li>
+<li>Thiếu thuật toán chuyên sâu cho tối ưu công nghiệp (hàng trăm ràng buộc) → dùng <b>PuLP, SciPy</b></li></ul>
+<div class="card sm">SymPy phù hợp: nền tảng lý thuyết &amp; bài toán cơ bản, giáo dục.</div>
+</section>
+
+<!-- 11 -->
+<section><div class="tag">Chương II · Giải thích câu lệnh</div><h2>(1) symbols() và Eq()</h2>
+<div class="row"><div><h3>Khai báo biến</h3>
+<pre><code class="python">x, y = symbols('x y')</code></pre>
+<ul class="sm"><li>x, y là biến <b>ký hiệu</b>, chưa có giá trị cụ thể</li><li>Phép toán lưu dưới dạng biểu thức đại số</li></ul></div>
+<div><h3>Tạo phương trình</h3>
+<pre><code class="python">Eq(x + y, 10)</code></pre>
+<ul class="sm"><li>Tạo đường thẳng biên x + y = 10 từ x + y ≤ 10</li><li>Dùng để tìm giao điểm ở bước sau</li></ul></div></div>
+</section>
+
+<!-- 12 -->
+<section><h2>(2) And() và solve()</h2>
+<div class="row"><div><h3>And() – phép giao</h3>
+<pre><code class="python">And(dk1, dk2, ...)</code></pre>
+<ul class="sm"><li>Gộp các điều kiện phải xảy ra <b>đồng thời</b></li><li>Có thể dùng ký hiệu &amp;</li></ul></div>
+<div><h3>solve() – giải hệ</h3>
+<pre><code class="python">solve([d1, d2], (x, y))
+# {x: 20, y: 80}</code></pre>
+<ul class="sm"><li>Tìm tọa độ đỉnh = giao điểm các đường biên</li><li>Trả về <b>dictionary</b>, chính xác tuyệt đối</li></ul></div></div>
+</section>
+
+<!-- 13 -->
+<section><h2>(3) plot_implicit()</h2>
+<pre><code class="python">plot_implicit(he, (x, min, max), (y, min, max))</code></pre>
+<ul><li>Quét mặt phẳng Oxy trong khoảng giới hạn của x và y</li>
+<li>Tự động <b>tô màu</b> vùng thỏa hệ bất phương trình</li>
+<li>Mô phỏng thao tác “gạch bỏ phần không thuộc miền nghiệm”</li></ul>
+<p class="xs">Phụ trợ: vòng lặp <b>for</b> duyệt cặp đường thẳng · <b>if</b> lọc đỉnh hợp lệ · <b>set()</b> loại đỉnh trùng</p>
+</section>
+
+<!-- 14 -->
+<section><div class="tag">Chương III · Ứng dụng 1</div><h2>Biểu diễn miền nghiệm – SGK Toán 10</h2>
+<div class="row"><div style="flex:7"><pre style="font-size:.56em"><code class="python">import sympy as sp
+
+# 1. Khai báo 2 ẩn x và y
+x, y = sp.symbols('x y')
+
+# ==========================================
+# 2. BIỂU DIỄN MIỀN NGHIỆM CHO HỆ a)
+# y - x &lt; -1; x &gt; 0; y &lt; 0
+# ==========================================
+he_a = sp.And(y - x &lt; -1, x &gt; 0, y &lt; 0)
+# Vẽ hệ a với giới hạn trục x từ -2 đến 6, y từ -6 đến 2
+do_thi_a = sp.plot_implicit(he_a, (x, -2, 6), (y, -6, 2), 
+                            title="Mien nghiem he a", show=False)
+
+do_thi_a.show()</code></pre></div>
+<div style="flex:4"><img alt="Miền nghiệm hệ a" style="width:100%;border:3px solid #7dd3fc;border-radius:12px;background:#fff;box-shadow:0 6px 18px rgba(2,132,199,.12)" src="data:image/png;base64,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9LOf/azcnMnJyYqLi9OSJUuqPH5sbGzZv3/33Xfau3evunfvLkkn/dwCqBu4BQxAfr9fffr00ezZs3X48GEVFxfr9ttvr9a+BQUFKiws1PTp0zV9+vQKt9mzZ0+5123atCn3ukmTJpJUrefRTrV/QkKC/vWvfykqKkrt27cvt13Hjh3P+JgV2bx5s7788kv5/f4Kv36q8z4eg4mJiRWur86PR0xMzEnfv0mTJuX23bx5swKBgJo3b16tOU+0f/9+ZWVlac6cOSdtGwgETjkjgNqHAAQgSbrrrruUkZGhXbt2qX///mrcuHG19jv+ZoeBAwcqLS2twm0uvfTScq8bNGhQ4XaO41Tre57t/jV1zJKSEv3sZz/T73//+wq/ftFFF1Xre5zN+VS27w+VlJSoefPmmjVrVoVfryxgjxswYIBWrFihBx98UJdddpni4uJUUlKiG264odybXQDUHQQgAEnSL3/5Sw0bNkwrV67UG2+8Ue39/H6/4uPjVVxcrD59+oRxwupr27atSkpKtHXrVl144YVl66vzTuPT0aFDBx08eLDWnHdlOnTooI8//lhXXXVVudu51fHtt99q8eLFysrK0mOPPVa2fvPmzTU9JoAI4hlAAJKkuLg4vfTSSxo/frxuvvnmau/XoEED3XbbbZo/f742bNhw0tcLCgpqcsxq6devnyTpxRdfLLd+ypQpNfp9BgwYoM8++0wfffTRSV8rLCw86bMV3TJgwAAVFxfriSeeOOlrx44dU2FhYaX7Hr/CeOLVyBPf4QygbuEKIIAyld3CPZUJEyZoyZIlSklJUUZGhi655BLt379fa9eu1ccff3xan2lXE5KTk3Xbbbdp8uTJ2rdvX9nHwHz99deSVGMfW/Lggw/qvffe00033aT09HQlJyfr0KFDWr9+vebNm6dt27bpvPPOq5HvdTauu+46DRs2TNnZ2Vq3bp369u2rc845R5s3b9bcuXP1/PPPV/rMZ0JCgq699lpNnDhRR48e1QUXXKCFCxdq69atET4LADWJAARw1lq0aKHVq1fr8ccf11tvvaUXX3xRzZo1U+fOnav8HL1weu2119SyZUu9/vrrevvtt9WnTx+98cYb6tSpk2JiYmrkezRq1EjLli3TU089pblz5+q1115TQkKCLrroImVlZZV7x6/bpk2bpuTkZL388st6+OGH1bBhQ7Vr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pPnz5+ubb77R7bff7vZYAAC4wuM4juP2EECkvffee7r11lsVCoV0zjnnVGufYDAon88nKSApIazzAQDCy3r9cAUQ5uzfv1+zZs1Sjx49qh1/AADUJwQgzHjooYd07rnnqlmzZsrLy9O7775b5fahUEjBYLDcAgBAfUAAos7KzMyUx+OpcsnJySnb/sEHH9Q//vEPLVy4UA0aNNCvf/1rVfUERHZ2tnw+X9mSmJgYidMCACDseAYQdVZBQYH27dtX5TZJSUmKjo4+af2///1vJSYmasWKFbryyisr3DcUCikUCpW9DgaD30cgzwACQF1nvX4auj0AcKb8fr/8fv8Z7VtSUiJJ5QLvRF6vV16v94yODwBAbUYAot5btWqV1qxZo6uvvlpNmjTRN998o0cffVQdOnSo9OofAAD1Gc8Aot5r1KiR3nrrLV1//fXq1KmThg4dqksvvVTLli3jCh8AwCSeAQSqic8BBID6w3r9cAUQAADAGAIQAADAGAIQAADAGAIQAADAGAIQAADAGAIQAADAGAIQAADAGAIQAADAGAIQAADAGAIQAADAGAIQAADAGAIQAADAGAIQAADAGAIQAADAGAIQAADAGAIQAADAGAIQAADAGAIQAADAGAIQAADAGAIQAADAGAIQAADAGAIQAADAGAIQAADAGAIQAADAGAIQAADAGAIQAADAGAIQAADAGAIQAADAGAIQAADAGAIQAADAGAIQAADAGAIQAADAGAIQAADAGAIQAADAGAIQAADAGAIQpoRCIV122WXyeDxat26d2+MAAOAKAhCm/P73v1erVq3cHgMAAFcRgDBjwYIFWrhwoSZNmuT2KAAAuKqh2wMAkbB7925lZGTonXfeUaNGjdweBwAAVxGAqPccx1F6erruueceXX755dq2bVu19guFQgqFQmWvg8FgmCYEACCyuAWMOiszM1Mej6fKJScnR1OmTNGBAwc0duzY0zp+dna2fD5f2ZKYmBimMwEAILI8juM4bg8BnImCggLt27evym2SkpI0YMAAvf/++/J4PGXri4uL1aBBA91999169dVXK9y3oiuApREYkJRQE6cAAHCJ9fohAFHv5eXllbt9u2PHDvXr10/z5s1TSkqKWrduXa3jBINB+Xw+EYAAUPdZrx+eAUS916ZNm3Kv4+LiJEkdOnSodvwBAFCf8AwgAACAMVwB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"></div></div>
+<p class="xs" style="margin:.4em 0 0"><b>And</b>: gộp hệ · <b>plot_implicit</b>: tô miền nghiệm · <b>show()</b>: hiển thị đồ thị · Hệ b) x ≥ 0; y ≥ 0; 2x + y ≤ 4 và c) x ≥ 0; x + y &gt; 5; x − y &lt; 0 viết tương tự</p>
+</section>
+
+<!-- 15 -->
+<section><div class="tag">Ứng dụng 2 · Bài 1</div><h2>Kinh doanh máy điều hòa</h2>
+<ul class="sm"><li>Vốn ≤ 1,2 tỷ; nhu cầu thị trường ≤ 100 máy</li>
+<li>Hai chiều: mua 20 triệu, lãi 3,5 triệu · Một chiều: mua 10 triệu, lãi 2 triệu</li>
+<li>x, y: số máy hai chiều, một chiều</li></ul>
+<div class="row"><div class="card sys">x ≥ 0, y ≥ 0<br>2x + y ≤ 120<br>x + y ≤ 100</div>
+<div class="card"><b>Hàm lợi nhuận</b><br>F(x;y) = 3,5x + 2y (triệu đồng)<br><span class="sm">Tìm (x;y) để F lớn nhất</span></div></div>
+</section>
+
+<!-- 16 -->
+<section><div class="tag">Ứng dụng 2 · Bài 1</div><h2>Code SymPy &amp; Kết quả</h2>
+<div class="row"><pre style="flex:3"><code class="python">x, y = sp.symbols('x y')
+he = sp.And(20*x + 10*y &lt;= 1200,
+            x + y &lt;= 100, x &gt;= 0, y &gt;= 0)
+P = sp.solve([20*x + 10*y - 1200,
+              x + y - 100], (x, y))
+F = (3.5*x + 2*y).subs(P)
+print(P, F)
+sp.plot_implicit(he, (x, -10, 110),
+                 (y, -10, 130))</code></pre>
+<div style="flex:2"><div class="card sm"><b>Kết quả</b><br>• 20 máy điều hòa hai chiều<br>• 80 máy điều hòa một chiều</div>
+<div class="res">Lợi nhuận lớn nhất:<br><b style="font-size:1.3em">230 triệu đồng</b></div></div></div>
+</section>
+<!-- 17 -->
+<section><div class="tag">Ứng dụng 3 · Bài 2</div><h2>Bài toán dinh dưỡng: thịt bò / thịt lợn</h2>
+<div class="row"><div><div class="card sys sm">8x + 6y ≥ 9 (protein)<br>x + 2y ≥ 2 (lipid)<br>0 ≤ x ≤ 1,6; 0 ≤ y ≤ 1,1</div>
+<p class="xs">Chi phí F = 250x + 160y (nghìn đồng) → tìm <b>nhỏ nhất</b></p>
+<pre><code class="python">d1 = 800*x + 600*y - 900
+d2 = 200*x + 400*y - 400
+A = sp.solve([d1, d2], (x, y))
+# B, C, D: giao với x=1.6, y=1.1
+cost = 250*x + 160*y
+cost.subs({x: A[x], y: A[y]})</code></pre></div>
+<div class="card sm"><b>Chi phí tại các đỉnh</b><br>(0,6; 0,7) → 262<br>(1,6; 0,2) → 432<br>(1,6; 1,1) → 576<br>(0,3; 1,1) → <b>251</b>
+<div class="res">Mua <b>0,3 kg bò + 1,1 kg lợn</b><br>Chi phí tối thiểu: <b>251 nghìn đồng</b></div></div></div>
+</section>
+
+<!-- 18 -->
+<section><div class="tag">Ứng dụng 4 · Bài 3</div><h2>Đầu tư trái phiếu</h2>
+<ul class="xs"><li>1200 triệu: chính phủ 7%, ngân hàng 8%, doanh nghiệp 12%</li><li>Chính phủ ≥ 3 × ngân hàng; doanh nghiệp ≤ 200 triệu</li></ul>
+<div class="row"><div style="flex:3"><div class="card sys sm">x ≥ 3y; x + y ≥ 1000; x + y ≤ 1200; x, y ≥ 0</div>
+<pre><code class="python">F = 0.07*x + 0.08*y + 0.12*(1200 - x - y)
+d1, d2 = x - 3*y, x + y - 1000
+A = sp.solve([d1, d2], (x, y))
+# ... các đỉnh còn lại, chọn F lớn nhất</code></pre></div>
+<div class="res" style="flex:2"><b>Lợi nhuận lớn nhất: 96,5 triệu</b><br>• 750 triệu: TP chính phủ<br>• 250 triệu: TP ngân hàng<br>• 200 triệu: TP doanh nghiệp</div></div>
+</section>
+<!-- 19 -->
+<section><h2>Kết luận</h2>
+<ul><li>Hệ thống hóa cơ sở lý thuyết, các hàm của SymPy và các bài toán ứng dụng thực tiễn</li>
+<li>SymPy giúp <b>giải nhanh, chính xác, giảm sai sót</b> so với tính tay</li>
+<li>Đồ thị miền nghiệm <b>trực quan, sinh động</b>, giúp hiểu bản chất bài toán</li>
+<li>Khả thi trong giáo dục: kết hợp tư duy Toán học và lập trình, làm phong phú phương pháp dạy học hiện đại</li></ul>
+</section>
+
+<!-- 20 -->
+<section style="text-align:center"><div class="tag">Kết thúc</div>
+<h1 style="font-size:2.3em;margin:.2em 0 .3em">Xin chân thành cảm ơn!</h1>
+<p>Nhóm 9 · Khoa Toán học · ĐHSP Huế</p>
+<p class="sm">Lê Thị Linh Châu · Nguyễn Thị Xuân Thi · Trần Nguyễn Uyên Thi · Trượng Ngụy Minh Triết</p>
+</section>
+
+</div></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/reveal.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/plugin/highlight/highlight.min.js"></script>
+<script>
+document.querySelectorAll('img.ph').forEach(function(i){
+ var w=i.dataset.w||600,h=i.dataset.h||400,t=i.dataset.t||'';
+ i.alt=t;i.width=w;i.height=h;i.style.maxHeight=h<200?'':'300px';
+ i.src='data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="'+w+'" height="'+h+'"><rect width="100%" height="100%" fill="#f0f9ff"/><text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" fill="#0284c7" font-family="Arial" font-size="'+(h<200?22:28)+'">'+t+'</text></svg>');
+});
+Reveal.initialize({width:1280,height:720,margin:0.03,hash:true,slideNumber:'c/t',transition:'slide',controls:true,progress:true,center:true,plugins:[RevealHighlight]});
+</script></body></html>
