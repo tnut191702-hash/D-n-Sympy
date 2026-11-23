@@ -1,7 +1,7 @@
 # 📐 Dự Án: Sử Dụng SymPy Để Giải Hệ Bất Phương Trình Bậc Nhất Hai Ẩn
 
 > **Đơn vị:** Khoa Toán học – Trường Đại học Sư phạm - Đại học Huế  
-> **Thực hiện:** Nhóm 10 *(Lê Thị Linh Châu, Nguyễn Thị Xuân Thi, Trần Nguyễn Uyên Thi, Trương Ngụy Minh Triết)*  
+> **Thực hiện:** Nhóm 10 *(Lê Thị Linh Châu, Nguyễn Thị Xuân Thi, Trần Nguyễn Uyên Thi, Trượng Ngụy Minh Triết)*  
 > **Thời gian:** Tháng 10/2026
 
 ---
